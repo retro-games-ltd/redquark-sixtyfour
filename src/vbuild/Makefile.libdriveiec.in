@@ -1,0 +1,119 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libdriveiec.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+SDIR   = $(VICE)/src/drive/iec
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/driveiec
+INC    = 
+AINC   = . $(INC) \
+$(MAINSRC) \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+		cia1571d.o \
+		cia1581d.o \
+		glue1571.o \
+		iec-cmdline-options.o \
+		iec-resources.o \
+		iec.o \
+		iecrom.o \
+		memiec.o \
+		via1d1541.o \
+		wd1770.o \
+		via4000.o \
+		fdd.o \
+		pc8477.o \
+
+HEADF = \
+		ciad.h \
+		glue1571.h \
+		iec-cmdline-options.h \
+		iec-resources.h \
+		iecrom.h \
+		memiec.h \
+		via1d1541.h \
+		wd1770.h \
+		via4000.h \
+		fdd.h \
+		pc8477.h
+
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice drive IEC library
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

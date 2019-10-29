@@ -1,0 +1,108 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libvic20cart.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+SDIR   = $(VICE)/src/vic20/cart
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/vic20/cart
+INC    = 
+AINC   = . $(INC) \
+$(MAINSRC) \
+$(MAINSRC)/viceport \
+$(SDIR) \
+$(VICE)/src/arch/unix \
+$(VICE)/src/core \
+$(VICE)/src \
+$(VICE)/src/vic20 \
+$(VICE)/src/vic20/cart \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+OBJF  = \
+    finalexpansion.o \
+    megacart.o \
+    vic-fp.o \
+    vic20-ieee488.o \
+    vic20-generic.o \
+    vic20-midi.o \
+    vic20-sidcart.o \
+    vic20cart.o \
+    vic20cartmem.o \
+	mascuerade-stubs.o \
+
+HEADF = \
+    finalexpansion.h \
+    megacart.h \
+    vic-fp.h \
+    vic20-generic.h \
+    vic20-ieee488.h \
+    vic20-midi.h \
+	vic20cart.h \
+    vic20cartmem.h \
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+hello:
+	@echo Building Vice Vic20 Cart library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

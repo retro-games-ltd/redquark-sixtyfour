@@ -1,0 +1,510 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = $(prefix)/lib
+defs = @DEFS@ -DBUILD_DATE=\"$(shell date +'%d-%m-%Y')\" -DBUILD_COMMIT=\"$(shell git rev-parse HEAD)\" -DPLATFORM_@PLATFORM@
+
+OURLIBSO = c64emu.rgl
+
+VICEMAINLIB = ../vbuild/libvicemain.a 
+
+MAINSRC ?= ..
+VICE  ?= $(MAINSRC)/vice2
+
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+MALIAW_INC    = @MALIAW_INC@
+
+SHLD   = @CXX@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+STRIP	= @STRIP@
+OBJ	   = ./shared
+INC    = $(FLASHLIGHT_INC) $(MALIAW_INC) $(MAINSRC)/common $(MAINSRC)/viceport $(VICE)/src $(VICE) $(VICE)/src/lib/p64 $(VICE)/src/monitor $(MAINSRC)/vbuild $(VICE)/src/platform $(MAINSRC)/ui
+AINC   = . $(INC) \
+
+ALLINC = $(addprefix -I,$(AINC))
+CFLAGS = -g @CONF_CFLAGS@ -O3 -c -fPIC -pthread $(defs) $(ALLINC)
+
+OBJF  = \
+platform_x86_runtime_cpu.o      \
+platform_syllable_runtime_os.o  \
+platform.o                      \
+re-version.o                    \
+re-pot.o                        \
+re-extfilt.o                    \
+re-dac.o                        \
+re-filter.o                     \
+re-envelope.o                   \
+re-wave.o                       \
+re-voice.o                      \
+re-sid.o                        \
+tapecontents.o                  \
+imagecontents.o                 \
+diskcontents.o                  \
+diskcontents-iec.o              \
+diskcontents-block.o            \
+dynlib.o                        \
+blockdev.o                      \
+signals.o                       \
+archdep.o                       \
+uitraps.o                       \
+files.o                         \
+vsync.o                         \
+core.o                          \
+sem.o                           \
+vsyncarch.o                     \
+video.o                         \
+uistatusbar.o                   \
+ui.o                            \
+uimon.o                         \
+vsidui.o                        \
+console.o                       \
+mousedrv.o                      \
+fullscreen.o                    \
+vpkeyboard.o                    \
+vpjoystick.o                    \
+video-viewport.o                \
+video-sound.o                   \
+video-resources.o               \
+video-render.o                  \
+video-render-pal.o              \
+video-render-crt.o              \
+video-render-2x2.o              \
+video-render-1x2.o              \
+video-color.o                   \
+video-cmdline-options.o         \
+video-canvas.o                  \
+renderyuv.o                     \
+render2x4crt.o                  \
+render2x4.o                     \
+renderscale2x.o                 \
+render2x2ntsc.o                 \
+render2x2pal.o                  \
+render2x2crt.o                  \
+render2x2.o                     \
+render1x2crt.o                  \
+render1x2.o                     \
+render1x1ntsc.o                 \
+render1x1pal.o                  \
+render1x1.o                     \
+rtc-58321a.o                    \
+rtc.o                           \
+ds1216e.o                       \
+ds1202_1302.o                   \
+ds12c887.o                      \
+bq4830y.o                       \
+userport_rtc.o                  \
+userport_joystick.o             \
+userport_digimax.o              \
+userport_dac.o                  \
+raster.o                        \
+raster-sprite-cache.o           \
+raster-sprite-status.o          \
+raster-sprite.o                 \
+raster-resources.o              \
+raster-modes.o                  \
+raster-line.o                   \
+raster-line-changes.o           \
+raster-line-changes-sprite.o    \
+raster-cmdline-options.o        \
+raster-changes.o                \
+raster-canvas.o                 \
+raster-cache.o                  \
+vicii.o                         \
+vicii-timing.o                  \
+vicii-stubs.o                   \
+vicii-sprites.o                 \
+vicii-snapshot.o                \
+vicii-resources.o               \
+vicii-phi1.o                    \
+vicii-mem.o                     \
+vicii-irq.o                     \
+vicii-fetch.o                   \
+vicii-draw.o                    \
+vicii-color.o                   \
+vicii-cmdline-options.o         \
+vicii-badline.o                 \
+ata.o                           \
+viacore.o                       \
+tpicore.o                       \
+t6721.o                         \
+spi-sdcard.o                    \
+ser-eeprom.o                    \
+riotcore.o                      \
+mc6821core.o                    \
+fmopl.o                         \
+flash040core.o                  \
+cs8900.o                        \
+ciatimer.o                      \
+ciacore.o                       \
+serial.o                        \
+serial-trap.o                   \
+serial-realdevice.o             \
+serial-iec.o                    \
+serial-iec-lib.o                \
+serial-iec-device.o             \
+serial-iec-bus.o                \
+serial-device.o                 \
+fsdrive.o                       \
+realdevice.o                    \
+p00.o                           \
+fileio.o                        \
+cbmfile.o                       \
+tapeimage.o                     \
+tape.o                          \
+tape-snapshot.o                 \
+tape-internal.o                 \
+tap.o                           \
+t64.o                           \
+fsdevice.o                      \
+fsdevice-write.o                \
+fsdevice-resources.o            \
+fsdevice-read.o                 \
+fsdevice-open.o                 \
+fsdevice-flush.o                \
+fsdevice-cmdline-options.o      \
+fsdevice-close.o                \
+fsimage.o                       \
+fsimage-probe.o                 \
+fsimage-p64.o                   \
+fsimage-gcr.o                   \
+fsimage-dxx.o                   \
+fsimage-create.o                \
+fsimage-check.o                 \
+diskimage.o                     \
+realimage.o                     \
+rawimage.o                      \
+rsuser.o                        \
+rs232drv.o                      \
+printer.o                       \
+printer-userport.o              \
+printer-serial.o                \
+output-text.o                   \
+output-select.o                 \
+output-graphics.o               \
+interface-userport.o            \
+interface-serial.o              \
+drv-raw.o                       \
+drv-nl10.o                      \
+drv-mps803.o                    \
+drv-ascii.o                     \
+driver-select.o                 \
+pngdrv.o                        \
+jpegdrv.o                       \
+ppmdrv.o                        \
+pcxdrv.o                        \
+iffdrv.o                        \
+gfxoutput.o                     \
+doodledrv.o                     \
+bmpdrv.o                        \
+soundalsa.o                     \
+soundmovie.o                    \
+soundwav.o                      \
+soundvoc.o                      \
+soundiff.o                      \
+soundfs.o                       \
+sounddump.o                     \
+sounddummy.o                    \
+soundaiff.o                     \
+monitor_network.o               \
+mon_lex.l.o                     \
+monitor.o                       \
+mon_util.o                      \
+mon_ui.o                        \
+mon_registerz80.o               \
+mon_registerR65C02.o            \
+mon_register6809.o              \
+mon_register6502dtv.o           \
+mon_register6502.o              \
+mon_memory.o                    \
+mon_file.o                      \
+mon_drive.o                     \
+mon_disassemble.o               \
+mon_command.o                   \
+mon_breakpoint.o                \
+mon_assemblez80.o               \
+mon_assemble6809.o              \
+mon_assembleR65C02.o            \
+mon_assemble6502.o              \
+mon_parse.o                     \
+asmz80.o                        \
+asmR65C02.o                     \
+asm6809.o                       \
+asm6502dtv.o                    \
+asm6502.o                       \
+resid.cc.o                      \
+sid.o                           \
+sid-snapshot.o                  \
+sid-resources.o                 \
+sid-cmdline-options.o           \
+fastsid.o                       \
+vdrive.o                        \
+vdrive-snapshot.o               \
+vdrive-rel.o                    \
+vdrive-internal.o               \
+vdrive-iec.o                    \
+vdrive-dir.o                    \
+vdrive-command.o                \
+vdrive-bam.o                    \
+parallel.o                      \
+parallel-trap.o                 \
+iecbus.o                        \
+p64.o                           \
+rotation.o                      \
+drive-sound.o                   \
+drivesync.o                     \
+driverom.o                      \
+driveimage.o                    \
+drivemem.o                      \
+drivecpu65c02.o                 \
+drivecpu.o                      \
+drive.o                         \
+drive-writeprotect.o            \
+drive-snapshot.o                \
+drive-resources.o               \
+drive-overflow.o                \
+drive-cmdline-options.o         \
+drive-check.o                   \
+via1d2031.o                     \
+riot2d.o                        \
+riot1d.o                        \
+memieee.o                       \
+ieeerom.o                       \
+ieee.o                          \
+ieee-resources.o                \
+ieee-cmdline-options.o          \
+fdc.o                           \
+supercard.o                     \
+profdos.o                       \
+dolphindos3.o                   \
+iec-c64exp.o                    \
+c64exp-resources.o              \
+c64exp-cmdline-options.o        \
+via2d.o                         \
+iecieee.o                       \
+pc8477.o                        \
+fdd.o                           \
+via4000.o                       \
+wd1770.o                        \
+via1d1541.o                     \
+memiec.o                        \
+iecrom.o                        \
+iec.o                           \
+iec-resources.o                 \
+iec-cmdline-options.o           \
+glue1571.o                      \
+cia1581d.o                      \
+cia1571d.o                      \
+tfe.o                           \
+sfx_soundsampler.o              \
+sfx_soundexpander.o             \
+georam.o                        \
+ds12c887rtc.o                   \
+digimax.o                       \
+c64acia1.o                      \
+zaxxon.o                        \
+westermann.o                    \
+warpspeed.o                     \
+supersnapshot4.o                \
+supersnapshot.o                 \
+supergames.o                    \
+superexplode5.o                 \
+stb.o                           \
+stardos.o                       \
+snapshot64.o                    \
+simonsbasic.o                   \
+silverrock128.o                 \
+ross.o                          \
+rexutility.o                    \
+rexep256.o                      \
+reu.o                           \
+retroreplay.o                   \
+ramcart.o                       \
+pagefox.o                       \
+prophet64.o                     \
+ocean.o                         \
+mmc64.o                         \
+mmcreplay.o                     \
+mikroass.o                      \
+magicvoice.o                    \
+magicformel.o                   \
+magicdesk.o                     \
+mach5.o                         \
+kingsoft.o                      \
+kcs.o                           \
+isepic.o                        \
+ide64.o                         \
+gs.o                            \
+gamekiller.o                    \
+funplay.o                       \
+freezemachine.o                 \
+freezeframe.o                   \
+formel64.o                      \
+finalplus.o                     \
+final3.o                        \
+final.o                         \
+expert.o                        \
+exos.o                          \
+epyxfastload.o                  \
+easyflash.o                     \
+dinamic.o                       \
+dqbb.o                          \
+diashowmaker.o                  \
+delaep7x8.o                     \
+delaep64.o                      \
+delaep256.o                     \
+comal80.o                       \
+capture.o                       \
+c64tpi.o                        \
+c64-midi.o                      \
+c64-generic.o                   \
+atomicpower.o                   \
+actionreplay.o                  \
+actionreplay4.o                 \
+actionreplay3.o                 \
+actionreplay2.o                 \
+crt.o                           \
+c64cartmem.o                    \
+c64carthooks.o                  \
+c64cart.o                       \
+reloc65.o                       \
+psid.o                          \
+plus60k.o                       \
+plus256k.o                      \
+patchrom.o                      \
+c64video.o                      \
+c64sound.o                      \
+c64-snapshot.o                  \
+c64rsuser.o                     \
+c64romset.o                     \
+c64rom.o                        \
+c64-resources.o                 \
+c64printer.o                    \
+c64pla.o                        \
+c64parallel.o                   \
+c64.o                           \
+c64model.o                      \
+c64memsnapshot.o                \
+c64memrom.o                     \
+c64mem.o                        \
+c64memlimit.o                   \
+c64meminit.o                    \
+c64keyboard.o                   \
+c64io.o                         \
+c64iec.o                        \
+c64gluelogic.o                  \
+c64fastiec.o                    \
+c64export.o                     \
+c64embedded.o                   \
+c64drive.o                      \
+c64datasette.o                  \
+c64-cmdline-options.o           \
+c64cia2.o                       \
+c64cia1.o                       \
+c64bus.o                        \
+c64_256k.o                      \
+alarm.o                         \
+attach.o                        \
+autostart.o                     \
+autostart-prg.o                 \
+charset.o                       \
+clkguard.o                      \
+clipboard.o                     \
+cmdline.o                       \
+cbmdos.o                        \
+cbmimage.o                      \
+color.o                         \
+crc32.o                         \
+datasette.o                     \
+debug.o                         \
+dma.o                           \
+embedded.o                      \
+event.o                         \
+findpath.o                      \
+fliplist.o                      \
+gcr.o                           \
+info.o                          \
+init.o                          \
+initcmdline.o                   \
+interrupt.o                     \
+ioutil.o                        \
+joystick.o                      \
+kbdbuf.o                        \
+keyboard.o                      \
+lib.o                           \
+libm_math.o                     \
+lightpen.o                      \
+log.o                           \
+machine-bus.o                   \
+machine.o                       \
+network.o                       \
+opencbmlib.o                    \
+palette.o                       \
+ram.o                           \
+rawfile.o                       \
+rawnet.o                        \
+resources.o                     \
+romset.o                        \
+screenshot.o                    \
+snapshot.o                      \
+socket.o                        \
+sound.o                         \
+sysfile.o                       \
+translate.o                     \
+traps.o                         \
+util.o                          \
+zfile.o                         \
+zipcode.o                       \
+maincpu.o                       \
+mouse.o                         \
+midi.o                          \
+bind.o                          \
+
+LOBJF = \
+c64emu.o \
+
+HEADF = 
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+LOBJS   = $(addprefix $(OBJ)/,$(LOBJF))
+
+PKG_LIBS=\
+@ALSA_LIBS@ \
+@ZLIB_LIBS@ \
+@PNG_LIBS@ \
+
+all: hello dirs $(OURLIBSO)
+	@echo Done
+
+hello:
+	@echo Building Vice C64 Emulater Module
+	@echo
+
+install:
+	@$(MAINSRC)/../install-sh -m 755 -t $(DESTDIR)${libdir} $(OURLIBSO)
+
+$(OBJ)/%.o: %.c $(HEAD)
+	@echo "CC	$<"
+	@$(CC) $(CFLAGS) -o $@	$<
+
+$(OURLIBSO): $(LOBJS) $(VICEMAINLIB)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@ $(OBJS)
+	@cd $(OBJ); $(AR) x ../$(VICEMAINLIB)
+	@echo "LD	$(OURLIBSO)"
+	@$(SHLD) -o $(OURLIBSO) $(OBJS) $(LOBJS) $(PKG_LIBS) -Wl,-wrap=raster_canvas_handle_end_of_frame -Wl,-wrap=video_canvas_refresh_all
+	@echo "STRIP	$(OURLIBSO)"
+	@$(STRIP) $(OURLIBSO)
+	@sleep 1; touch .stamp
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

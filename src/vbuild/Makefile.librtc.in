@@ -1,0 +1,109 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = librtc.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+SDIR   = $(VICE)/src/rtc
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/rtc
+INC    = 
+AINC   = . $(INC) \
+$(FLASHLIGHT_INC) \
+$(MAINSRC)/common \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/vdrive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+    bq4830y.o \
+    ds12c887.o \
+    ds1202_1302.o \
+    ds1216e.o \
+    rtc.o \
+    rtc-58321a.o \
+
+HEADF = \
+    bq4830y.h \
+    ds12c887.h \
+    ds1202_1302.h \
+    ds1216e.h \
+    rtc.h \
+    rtc-58321a.h
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice C64 RTC library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

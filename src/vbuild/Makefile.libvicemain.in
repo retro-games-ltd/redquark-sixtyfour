@@ -1,0 +1,153 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libvicemain.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+SDIR   = $(VICE)/src
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+CXX	   = @CXX@
+SINC   = $(SDIR)
+OBJ	   = ./obj/vicemain
+INC    = 
+AINC   = . $(INC) \
+$(MAINSRC) \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src/core \
+$(VICE)/src \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/vdrive \
+$(VICE)/src/monitor \
+$(VICE)/src/imagecontents \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/platform \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+OBJF  = \
+	alarm.o \
+	attach.o \
+	autostart.o \
+	autostart-prg.o \
+	charset.o \
+	clkguard.o \
+	clipboard.o \
+	cmdline.o \
+	cbmdos.o \
+	cbmimage.o \
+	color.o \
+	crc32.o \
+	datasette.o \
+	debug.o \
+	dma.o \
+	embedded.o \
+	event.o \
+	findpath.o \
+	fliplist.o \
+	gcr.o \
+	info.o \
+	init.o \
+	initcmdline.o \
+	interrupt.o \
+	ioutil.o \
+	joystick.o \
+	kbdbuf.o \
+	keyboard.o \
+	lib.o \
+	libm_math.o \
+	lightpen.o \
+	log.o \
+	machine-bus.o \
+	machine.o \
+	network.o \
+	opencbmlib.o \
+	palette.o \
+	ram.o \
+	rawfile.o \
+	rawnet.o \
+	resources.o \
+	romset.o \
+	screenshot.o \
+	snapshot.o \
+	socket.o \
+	sound.o \
+	sysfile.o \
+	translate.o \
+	traps.o \
+	util.o \
+	zfile.o \
+	zipcode.o \
+	maincpu.o \
+	mouse.o \
+	ps2mouse.o \
+	midi.o \
+
+HEADF = 
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice main library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+	@echo Combining libraries into $@
+	@$(AR) -M < vicemain.mri
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

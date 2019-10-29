@@ -1,0 +1,44 @@
+open libvicemain.a
+addlib libc64.a 
+* addlib libc64dtv.a 
+addlib libvic20.a 
+addlib libc64cartsystem.a 
+addlib libc64cart.a 
+addlib libc64commoncart.a 
+addlib libvic20cart.a 
+addlib libdriveiec.a
+addlib libdriveiecieee.a
+addlib libdriveiecc64exp.a
+addlib libdriveieee.a
+addlib libdrive.a
+addlib libp64.a
+addlib libiecbus.a
+addlib libparallel.a
+addlib libvdrive.a
+addlib libsid.a
+addlib libmonitor.a
+addlib libsounddrv.a
+addlib libgfxoutputdrv.a
+addlib libprinterdrv.a
+addlib librs232drv.a
+addlib libdiskimage.a
+addlib libfsdevice.a
+addlib libtape.a
+addlib libfileio.a
+addlib libserial.a
+addlib libcore.a
+addlib libvicii.a
+* addlib libviciidtv.a
+addlib libraster.a
+addlib libuserport.a
+addlib librtc.a
+addlib libvideo.a
+* addlib libc128.a 
+* addlib libiec128dcr.a
+* addlib libvdc.a
+addlib ../viceport/libviceport.a
+addlib libimagecontents.a
+addlib libresid.a
+addlib libplatform.a
+save
+end

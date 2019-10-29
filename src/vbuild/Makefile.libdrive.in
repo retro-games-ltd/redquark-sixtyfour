@@ -1,0 +1,134 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libdrive.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+SDIR   = $(VICE)/src/drive
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/drive
+INC    = 
+AINC   = . $(INC) \
+$(MAINSRC) \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/vdrive \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+    drive-check.o \
+    drive-cmdline-options.o \
+    drive-overflow.o \
+    drive-resources.o \
+    drive-snapshot.o \
+    drive-writeprotect.o \
+    drive.o \
+    drivecpu.o \
+    drivecpu65c02.o \
+    drivemem.o \
+    driveimage.o \
+    driverom.o \
+    drivesync.o \
+    drive-sound.o \
+    rotation.o \
+
+HEADF = \
+    drive-check.h \
+    drive-cmdline-options.h \
+    drive-overflow.h \
+    drive-resources.h \
+    drive-snapshot.h \
+    drive-writeprotect.h \
+    drive.h \
+    drivecpu.h \
+    drivecpu65c02.h \
+    driveimage.h \
+    drivemem.h \
+    driverom.h \
+    drivesync.h \
+    drivetypes.h \
+    iec-c64exp.h \
+    iec-plus4exp.h \
+    iec.h \
+    iec128dcr.h \
+    iecieee.h \
+    ieee.h \
+    drive-sound.h \
+    rotation.h \
+    tcbm.h \
+    viad.h
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice drive IEEE library
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

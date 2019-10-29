@@ -1,0 +1,127 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libraster.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+SDIR   = $(VICE)/src/raster
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/raster
+INC    = 
+AINC   = . $(INC) \
+$(FLASHLIGHT_INC) \
+$(MAINSRC)/common \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/vdrive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+    raster-cache.o \
+    raster-canvas.o \
+    raster-changes.o \
+    raster-cmdline-options.o \
+    raster-line-changes-sprite.o \
+    raster-line-changes.o \
+    raster-line.o \
+    raster-modes.o \
+    raster-resources.o \
+    raster-sprite.o \
+    raster-sprite-status.o \
+    raster-sprite-cache.o \
+    raster.o \
+
+HEADF = \
+    raster-cache-const.h \
+    raster-cache-fill-1fff.h \
+    raster-cache-fill-39ff.h \
+    raster-cache-fill.h \
+    raster-cache-nibbles.h \
+    raster-cache-text-ext.h \
+    raster-cache-text-std.h \
+    raster-cache.h \
+    raster-canvas.h \
+    raster-changes.h \
+    raster-cmdline-options.h \
+    raster-line.h \
+    raster-modes.h \
+    raster-resources.h \
+    raster-sprite.h \
+    raster-sprite-status.h \
+    raster-sprite-cache.h \
+    raster.h
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice C64 raster library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

@@ -1,0 +1,220 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libc64cart.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+SDIR   = $(VICE)/src/c64/cart
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/c64cart
+INC    = 
+AINC   = . $(INC) \
+$(MAINSRC) \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+		actionreplay2.o \
+		actionreplay3.o \
+		actionreplay4.o \
+		actionreplay.o \
+		atomicpower.o \
+		c64-generic.o \
+		c64-midi.o \
+		c64tpi.o \
+		capture.o \
+		comal80.o \
+		delaep256.o \
+		delaep64.o \
+		delaep7x8.o \
+		diashowmaker.o \
+		dqbb.o \
+		dinamic.o \
+		easyflash.o \
+		epyxfastload.o \
+		exos.o \
+		expert.o \
+		final.o \
+		final3.o \
+		finalplus.o \
+		formel64.o \
+		freezeframe.o \
+		freezemachine.o \
+		funplay.o \
+		gamekiller.o \
+		gs.o \
+		ide64.o \
+		isepic.o \
+		kcs.o \
+		kingsoft.o \
+		mach5.o \
+		magicdesk.o \
+		magicformel.o \
+		magicvoice.o \
+		mikroass.o \
+		mmcreplay.o \
+		mmc64.o \
+		ocean.o \
+		prophet64.o \
+		pagefox.o \
+		ramcart.o \
+		retroreplay.o \
+		reu.o \
+		rexep256.o \
+		rexutility.o \
+		ross.o \
+		silverrock128.o \
+		simonsbasic.o \
+		snapshot64.o \
+		stardos.o \
+		stb.o \
+		superexplode5.o \
+		supergames.o \
+		supersnapshot.o \
+		supersnapshot4.o \
+		warpspeed.o \
+		westermann.o \
+		zaxxon.o 
+
+
+
+
+HEADF = \
+		actionreplay2.h \
+		actionreplay3.h \
+		actionreplay4.h \
+		actionreplay.h \
+		atomicpower.h \
+		c64-generic.h \
+		c64-midi.h \
+		c64tpi.h \
+		capture.h \
+		comal80.h \
+		delaep256.h \
+		delaep64.h \
+		delaep7x8.h \
+		diashowmaker.h \
+		dqbb.h \
+		dinamic.h \
+		easyflash.h \
+		epyxfastload.h \
+		exos.h \
+		expert.h \
+		final.h \
+		final3.h \
+		finalplus.h \
+		formel64.h \
+		freezeframe.h \
+		freezemachine.h \
+		funplay.h \
+		gamekiller.h \
+		gs.h \
+		ide64.h \
+		isepic.h \
+		kcs.h \
+		kingsoft.h \
+		mach5.h \
+		magicdesk.h \
+		magicformel.h \
+		magicvoice.h \
+		mikroass.h \
+		mmcreplay.h \
+		mmc64.h \
+		ocean.h \
+		prophet64.h \
+		pagefox.h \
+		ramcart.h \
+		retroreplay.h \
+		reu.h \
+		rexep256.h \
+		rexutility.h \
+		ross.h \
+		silverrock128.h \
+		simonsbasic.h \
+		snapshot64.h \
+		stardos.h \
+		stb.h \
+		superexplode5.h \
+		supergames.h \
+		supersnapshot.h \
+		supersnapshot4.h \
+		warpspeed.h \
+		westermann.h \
+		zaxxon.h
+
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice C64 cartridge library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

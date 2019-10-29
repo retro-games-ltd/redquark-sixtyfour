@@ -1,0 +1,432 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = $(prefix)/lib
+defs = @DEFS@ -DBUILD_DATE=\"$(shell date +'%d-%m-%Y')\" -DBUILD_COMMIT=\"$(shell git rev-parse HEAD)\" -DPLATFORM_@PLATFORM@
+
+OURLIBSO = vic20emu.rgl
+
+VICEMAINLIB = ../vbuild/libvicemain.a 
+
+MAINSRC ?= ..
+VICE  ?= $(MAINSRC)/vice2
+
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+MALIAW_INC    = @MALIAW_INC@
+
+SHLD   = @CXX@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+STRIP	= @STRIP@
+OBJ	   = ./shared
+INC    = $(FLASHLIGHT_INC) $(MALIAW_INC) $(MAINSRC)/common $(MAINSRC)/viceport $(VICE)/src $(VICE) $(VICE)/src/lib/p64 $(VICE)/src/monitor $(MAINSRC)/vbuild $(VICE)/src/platform $(MAINSRC)/ui
+AINC   = . $(INC) \
+
+ALLINC = $(addprefix -I,$(AINC))
+CFLAGS = -g @CONF_CFLAGS@ -O3 -c -fPIC -pthread $(defs) $(ALLINC)
+
+OBJF  = \
+alarm.o \
+attach.o \
+autostart.o \
+autostart-prg.o \
+charset.o \
+clkguard.o \
+clipboard.o \
+cmdline.o \
+cbmdos.o \
+cbmimage.o \
+color.o \
+crc32.o \
+datasette.o \
+debug.o \
+dma.o \
+embedded.o \
+event.o \
+findpath.o \
+fliplist.o \
+dynlib.o                        \
+opencbmlib.o \
+gcr.o \
+info.o \
+init.o \
+initcmdline.o \
+interrupt.o \
+ioutil.o \
+kbdbuf.o \
+keyboard.o \
+lib.o \
+libm_math.o \
+lightpen.o \
+log.o \
+machine-bus.o \
+machine.o \
+network.o \
+palette.o \
+ram.o \
+rawfile.o \
+rawnet.o \
+resources.o \
+romset.o \
+screenshot.o \
+snapshot.o \
+socket.o \
+sound.o \
+sysfile.o \
+translate.o \
+traps.o \
+util.o \
+zfile.o \
+zipcode.o \
+mouse.o \
+midi.o \
+\
+fullscreen.o \
+mousedrv.o \
+console.o \
+vpjoystick.o \
+sem.o \
+vpkeyboard.o \
+uimon.o \
+uistatusbar.o \
+files.o \
+ui.o \
+vsyncarch.o \
+core.o \
+uitraps.o \
+bind.o \
+vsync.o \
+video.o \
+\
+vic-cmdline-options.o \
+vic-color.o \
+vic-cycle.o \
+vic-draw.o \
+vic-mem.o \
+vic-resources.o \
+vic-snapshot.o \
+vic-timing.o \
+vic.o \
+vic20-cmdline-options.o \
+vic20-resources.o \
+vic20-snapshot.o \
+vic20.o \
+vic20bus.o \
+vic20cpu.o \
+vic20datasette.o \
+vic20drive.o \
+vic20embedded.o \
+vic20iec.o \
+vic20ieeevia1.o \
+vic20ieeevia2.o \
+vic20io.o \
+vic20mem.o \
+vic20memrom.o \
+vic20memsnapshot.o \
+vic20printer.o \
+vic20rom.o \
+vic20romset.o \
+vic20rsuser.o \
+vic20sound.o \
+vic20via1.o \
+vic20via2.o \
+vic20video.o \
+finalexpansion.o \
+megacart.o \
+vic-fp.o \
+vic20-generic.o \
+vic20-ieee488.o \
+vic20-midi.o \
+vic20-sidcart.o \
+vic20cart.o \
+vic20cartmem.o \
+c64acia1.o \
+digimax.o \
+ds12c887rtc.o \
+georam.o \
+sfx_soundexpander.o \
+sfx_soundsampler.o \
+tfe.o \
+cia1571d.o \
+cia1581d.o \
+glue1571.o \
+iec-cmdline-options.o \
+iec-resources.o \
+iec.o \
+iecrom.o \
+memiec.o \
+via1d1541.o \
+wd1770.o \
+via4000.o \
+fdd.o \
+pc8477.o \
+iecieee.o \
+via2d.o \
+fdc.o \
+ieee-cmdline-options.o \
+ieee-resources.o \
+ieee.o \
+ieeerom.o \
+memieee.o \
+riot1d.o \
+riot2d.o \
+via1d2031.o \
+drive-check.o \
+drive-cmdline-options.o \
+drive-overflow.o \
+drive-resources.o \
+drive-snapshot.o \
+drive-writeprotect.o \
+drive.o \
+drivecpu.o \
+drivecpu65c02.o \
+drivemem.o \
+driveimage.o \
+driverom.o \
+drivesync.o \
+drive-sound.o \
+rotation.o \
+p64.o \
+iecbus.o \
+parallel-trap.o \
+parallel.o \
+vdrive-bam.o \
+vdrive-command.o \
+vdrive-dir.o \
+vdrive-iec.o \
+vdrive-internal.o \
+vdrive-rel.o \
+vdrive-snapshot.o \
+vdrive.o \
+asm6502.o \
+asm6502dtv.o \
+asm6809.o \
+asmR65C02.o \
+asmz80.o \
+resid.cc.o                      \
+re-version.o                    \
+re-pot.o                        \
+re-extfilt.o                    \
+re-dac.o                        \
+re-filter.o                     \
+re-envelope.o                   \
+re-wave.o                       \
+re-voice.o                      \
+re-sid.o                        \
+mon_assemble6502.o \
+mon_assembleR65C02.o \
+mon_assemble6809.o \
+mon_assemblez80.o \
+mon_breakpoint.o \
+mon_command.o \
+mon_disassemble.o \
+mon_drive.o \
+mon_file.o \
+mon_memory.o \
+mon_register6502.o \
+mon_register6502dtv.o \
+mon_register6809.o \
+mon_registerR65C02.o \
+mon_registerz80.o \
+mon_ui.o \
+mon_util.o \
+mon_parse.o \
+monitor.o \
+monitor_network.o \
+mon_lex.l.o                     \
+soundaiff.o \
+sounddummy.o \
+sounddump.o \
+soundfs.o \
+soundiff.o \
+soundvoc.o \
+soundwav.o \
+soundmovie.o \
+soundalsa.o \
+bmpdrv.o \
+doodledrv.o \
+gfxoutput.o \
+iffdrv.o \
+pcxdrv.o \
+ppmdrv.o \
+pngdrv.o \
+jpegdrv.o \
+driver-select.o \
+drv-ascii.o \
+drv-mps803.o \
+drv-nl10.o \
+drv-raw.o \
+interface-serial.o \
+interface-userport.o \
+output-graphics.o \
+output-select.o \
+output-text.o \
+printer-serial.o \
+printer-userport.o \
+printer.o \
+rs232drv.o \
+rsuser.o \
+diskimage.o \
+fsimage-check.o \
+fsimage-create.o \
+fsimage-dxx.o \
+fsimage-gcr.o \
+fsimage-p64.o \
+fsimage-probe.o \
+fsimage.o \
+rawimage.o \
+realimage.o \
+fsdevice-close.o \
+fsdevice-cmdline-options.o \
+fsdevice-flush.o \
+fsdevice-open.o \
+fsdevice-read.o \
+fsdevice-resources.o \
+fsdevice-write.o \
+fsdevice.o \
+t64.o \
+tap.o \
+tape-internal.o \
+tape-snapshot.o \
+tape.o \
+tapeimage.o \
+cbmfile.o \
+fileio.o \
+p00.o \
+fsdrive.o \
+serial-device.o \
+serial-iec-bus.o \
+serial-iec-device.o \
+serial-iec-lib.o \
+serial-iec.o \
+serial-realdevice.o \
+serial-trap.o \
+serial.o \
+realdevice.o \
+ciacore.o \
+ciatimer.o \
+cs8900.o \
+flash040core.o \
+fmopl.o \
+mc6821core.o \
+riotcore.o \
+ser-eeprom.o \
+spi-sdcard.o \
+t6721.o \
+tpicore.o \
+viacore.o \
+ata.o \
+raster-cache.o \
+raster-canvas.o \
+raster-changes.o \
+raster-cmdline-options.o \
+raster-line-changes-sprite.o \
+raster-line-changes.o \
+raster-line.o \
+raster-modes.o \
+raster-resources.o \
+raster-sprite.o \
+raster-sprite-status.o \
+raster-sprite-cache.o \
+raster.o \
+bq4830y.o \
+ds12c887.o \
+ds1202_1302.o \
+ds1216e.o \
+rtc.o \
+rtc-58321a.o \
+userport_dac.o \
+userport_digimax.o \
+userport_joystick.o \
+userport_rtc.o \
+fastsid.o \
+sid-cmdline-options.o \
+sid-resources.o \
+sid-snapshot.o \
+sid.o \
+render1x1.o \
+render1x1pal.o \
+render1x1ntsc.o \
+render1x2.o \
+render1x2crt.o \
+render2x2.o \
+render2x2crt.o \
+render2x2pal.o \
+render2x2ntsc.o \
+renderscale2x.o \
+render2x4.o \
+render2x4crt.o \
+renderyuv.o \
+video-canvas.o \
+video-cmdline-options.o \
+video-color.o \
+video-render-1x2.o \
+video-render-2x2.o \
+video-render-crt.o \
+video-render-pal.o \
+video-render.o \
+video-resources.o \
+video-sound.o \
+video-viewport.o \
+blockdev.o \
+archdep.o \
+signals.o \
+diskcontents-block.o \
+diskcontents-iec.o \
+diskcontents.o \
+imagecontents.o \
+tapecontents.o \
+joystick.o \
+platform.o \
+platform_syllable_runtime_os.o \
+platform_x86_runtime_cpu.o \
+mascuerade-stubs.o \
+
+LOBJF = \
+vic20emu.o \
+
+HEADF = 
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+LOBJS   = $(addprefix $(OBJ)/,$(LOBJF))
+
+PKG_LIBS=\
+@ALSA_LIBS@ \
+@ZLIB_LIBS@ \
+@PNG_LIBS@ \
+
+all: hello dirs $(OURLIBSO)
+	@echo Done
+
+hello:
+	@echo Building VIC 20 Emulator module
+	@echo
+
+install:
+	@$(MAINSRC)/../install-sh -m 755 -t $(DESTDIR)${libdir} $(OURLIBSO)
+
+$(OBJ)/%.o: %.c $(HEAD)
+	@echo "CC	$<"
+	@$(CC) $(CFLAGS) -o $@	$<
+
+$(OURLIBSO): $(LOBJS) $(VICEMAINLIB)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@ $(OBJS)
+	@cd $(OBJ); $(AR) x ../$(VICEMAINLIB)
+	@echo "LD	$(OURLIBSO)"
+	@$(SHLD) -o $(OURLIBSO) $(OBJS) $(LOBJS) $(PKG_LIBS) -Wl,-wrap=raster_canvas_handle_end_of_frame -Wl,-wrap=video_canvas_refresh_all
+	@echo "STRIP	$(OURLIBSO)"
+	@$(STRIP) $(OURLIBSO)
+	@sleep 1; touch .stamp
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

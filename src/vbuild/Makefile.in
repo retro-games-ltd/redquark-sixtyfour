@@ -1,0 +1,51 @@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = $(prefix)/lib
+includedir = $(prefix)/include
+
+#JP=-j16
+
+all:
+	$(MAKE) -f Makefile.libc64
+	$(MAKE) -f Makefile.libc64cart
+	$(MAKE) -f Makefile.libc64cartsystem
+	$(MAKE) -f Makefile.libc64commoncart
+	$(MAKE) -f Makefile.libcore
+	$(MAKE) -f Makefile.libdiskimage
+	$(MAKE) -f Makefile.libdrive
+	$(MAKE) -f Makefile.libdriveiec
+	$(MAKE) -f Makefile.libdriveiecc64exp
+	$(MAKE) -f Makefile.libdriveiecieee
+	$(MAKE) -f Makefile.libdriveieee
+	$(MAKE) -f Makefile.libfileio
+	$(MAKE) -f Makefile.libfsdevice
+	$(MAKE) -f Makefile.libgfxoutputdrv
+	$(MAKE) -f Makefile.libiecbus
+	$(MAKE) -f Makefile.libimagecontents
+	$(MAKE) -f Makefile.libmonitor
+	$(MAKE) -f Makefile.libp64
+	$(MAKE) -f Makefile.libparallel
+	$(MAKE) -f Makefile.libplatform
+	$(MAKE) -f Makefile.libprinterdrv
+	$(MAKE) -f Makefile.libraster
+	$(MAKE) -f Makefile.libresid
+	$(MAKE) -f Makefile.libresidfp
+	$(MAKE) -f Makefile.librs232drv
+	$(MAKE) -f Makefile.librtc
+	$(MAKE) -f Makefile.libserial
+	$(MAKE) -f Makefile.libsid
+	$(MAKE) -f Makefile.libtape
+	$(MAKE) -f Makefile.libuserport
+	$(MAKE) -f Makefile.libvdrive
+	$(MAKE) -f Makefile.libvicii
+	$(MAKE) -f Makefile.libvideo
+	$(MAKE) -f Makefile.libvic20
+	$(MAKE) -f Makefile.libvic20cart
+	$(MAKE) -f Makefile.libsounddrv
+	rm -f libvicemain.a
+	$(MAKE) -f Makefile.libvicemain
+
+clean:
+	@echo Cleaning vbuild
+	@rm -f lib*.a
+	@[ -d obj ] && rm -rf obj || true

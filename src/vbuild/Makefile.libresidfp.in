@@ -1,0 +1,118 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libresidfp.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+SDIR   = $(VICE)/src/resid-fp
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/resid-fp
+INC    = 
+AINC   = . $(INC) \
+$(FLASHLIGHT_INC) \
+$(MAINSRC)/common \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/vdrive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+
+DEFS = -DPACKAGE_NAME=\"reSID\" -DPACKAGE_TARNAME=\"resid\" -DPACKAGE_VERSION=\"1.0-pre2\" -DPACKAGE_STRING=\"reSID\ 1.0-pre2\" -DPACKAGE_BUGREPORT=\"resid@nimrod.no\" -DPACKAGE_URL=\"\" -DPACKAGE=\"resid\" -DVERSION=\"1.0-pre2\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DSIZEOF_INT=4
+
+CFLAGS = -g -pthread -c -Wall @CONF_CFLAGS@ -O3 -ffast-math -fno-exceptions $(DEFS) $(ALLINC)
+
+
+DIRS= obj
+
+OBJF  = \
+	sid.o \
+	voice.o \
+	wave.o \
+	envelope.o \
+	filter.o \
+	extfilt.o \
+	pot.o \
+	version.o \
+	convolve.o \
+	convolve-sse.o \
+
+HEADF = \
+	sid.h \
+	voice.h \
+	wave.h \
+	envelope.h \
+	filter.h \
+	extfilt.h \
+	pot.h \
+	residfp-config.h \
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building RESID-FP library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.cc $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

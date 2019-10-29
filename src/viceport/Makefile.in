@@ -1,0 +1,77 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+defs = @DEFS@ -DPLATFORM_@PLATFORM@
+
+OURLIB = libviceport.a
+
+MAINSRC ?= ..
+VICE  ?= $(MAINSRC)/vice2
+
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+
+CC     = @CC@
+AR     = @AR@
+INC    = $(FLASHLIGHT_INC) $(MAINSRC)/common $(MAINSRC)/input $(VICE)/src $(VICE) $(VICE)/src/lib/p64 $(VICE)/src/monitor $(MAINSRC)/vbuild $(VICE)/src/platform $(MAINSRC)/ui
+AINC   = . $(INC)
+OBJ	   = ./obj
+
+ALLINC = $(addprefix -I,$(AINC))
+CFLAGS = -g @CONF_CFLAGS@ -O3 -c -fPIC -pthread $(defs) $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+vpjoystick.o \
+vpkeyboard.o \
+fullscreen.o \
+mousedrv.o \
+console.o \
+vsidui.o \
+uimon.o \
+ui.o \
+uistatusbar.o \
+video.o \
+vsyncarch.o \
+sem.o \
+core.o \
+vsync.o \
+files.o \
+uitraps.o \
+bind.o \
+
+VICE_ARCH_OBJF =\
+archdep.o \
+signals.o \
+blockdev.o \
+dynlib.o 
+
+HEADF = 
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+MDBOBJS = $(addprefix $(OBJ)/,$(MEMDBOBJF))
+VICEOBJS= $(addprefix $(VICE)/src/arch/unix/,$(VICE_ARCH_OBJF))
+
+all: hello dirs $(OURLIB)
+	@echo Done
+
+hello:
+	@echo Building the64 vice bridge
+	@echo
+
+$(OURLIB): $(OBJS) $(VICEOBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS) $(VICEOBJS)
+
+$(OBJ)/%.o: %.c $(HEAD)
+	@echo "CC	$<"
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB)
+
+dirs:
+	@[ -d obj ] || mkdir obj

@@ -1,0 +1,40 @@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+ROOTDIR     := $(shell pwd)
+MAINSRC     := $(ROOTDIR)/src
+VICE        ?= $(MAINSRC)/vice2
+FREETYPE_GL ?= $(MAINSRC)/freetype-gl
+
+include release.mk
+
+CARG := VICE=$(VICE) FREETYPE_GL=$(FREETYPE_GL) MAINSRC=$(MAINSRC) MAJOR=$(MAJOR) MINOR=$(MINOR) PATCH=$(PATCH) BUILDCODENAME=$(BUILDCODENAME)
+
+TARGET=all
+
+all: assets build
+
+build:
+	@$(MAKE) -C src $(CARG)
+
+# Collect all assets together into a single staging directory
+assets:
+
+clean:
+	@$(MAKE) -C src $(CARG) clean
+
+install_libs:
+	@$(MAKE) -C src/c64emu $(CARG) install
+	@$(MAKE) -C src/vic20emu $(CARG) install
+
+# For full firmware target build
+install: install_libs
+	@echo Copy resource and assets tree into $(DESTDIR)${prefix}
+	@mkdir -p $(DESTDIR)${prefix}/lib/vice
+	@cp -r src/vice2/data/C64     $(DESTDIR)${prefix}/lib/vice
+	@cp -r src/vice2/data/VIC20   $(DESTDIR)${prefix}/lib/vice
+	@cp -r src/vice2/data/DRIVES  $(DESTDIR)${prefix}/lib/vice
+	@cp -r src/vice2/data/PRINTER $(DESTDIR)${prefix}/lib/vice
+	@cp -r src/vice2/data/fonts   $(DESTDIR)${prefix}/lib/vice
+	@cp    data/c64/*             $(DESTDIR)${prefix}/lib/vice/C64
+	@cp    data/vic20/*           $(DESTDIR)${prefix}/lib/vice/VIC20

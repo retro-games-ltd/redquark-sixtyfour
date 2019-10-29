@@ -1,0 +1,126 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libvicii.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+SDIR   = $(VICE)/src/vicii
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/vicii
+INC    = 
+AINC   = . $(INC) \
+$(FLASHLIGHT_INC) \
+$(MAINSRC)/common \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64dtv \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/vdrive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+    vicii-badline.o \
+    vicii-clock-stretch.o \
+    vicii-cmdline-options.o \
+    vicii-color.o \
+    vicii-draw.o \
+    vicii-fetch.o \
+    vicii-irq.o \
+    vicii-mem.o \
+    vicii-phi1.o \
+    vicii-resources.o \
+    vicii-snapshot.o \
+    vicii-sprites.o \
+    vicii-stubs.o \
+    vicii-timing.o \
+    vicii.o \
+
+HEADF = \
+    vicii-badline.h \
+    vicii-cmdline-options.h \
+    vicii-color.h \
+    vicii-draw.h \
+    vicii-fetch.h \
+    vicii-irq.h \
+    vicii-mem.h \
+    vicii-phi1.h \
+    vicii-resources.h \
+    vicii-snapshot.h \
+    vicii-sprites.h \
+    vicii-timing.h \
+    viciitypes.h
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice VIC II library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

@@ -1,0 +1,103 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libsid.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+SDIR   = $(VICE)/src/sid
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+CXX    = @CXX@
+SINC   = $(SDIR)
+OBJ	   = ./obj/sid
+INC    = 
+AINC   = . $(INC) \
+$(MAINSRC) \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/resid-fp \
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c -Wno-inline -Wall -fno-exceptions -DHAVE_CONFIG_H $(ALLINC)
+CFLAGS = $(ALLINC) -g -pthread -c -DHAVE_CONFIG_H -fno-exceptions @CONF_CFLAGS@ -O3 -Wall -Wno-inline -MD -MP
+
+DIRS= obj
+
+OBJF  = \
+    fastsid.o \
+    sid-cmdline-options.o \
+    sid-resources.o \
+    sid-snapshot.o \
+    sid.o \
+    resid.cc.o \
+    resid-fp.cc.o \
+
+HEADF = \
+    fastsid.h \
+    sid-cmdline-options.h \
+    sid-resources.h \
+    sid-snapshot.h \
+    sid.h \
+    wave6581.h \
+    wave8580.h \
+    resid.h \
+    resid-fp.h
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice SID library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+$(OBJ)/%.cc.o: $(SDIR)/%.cc $(HEAD)
+	@echo CC	$<
+	@$(CXX) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end

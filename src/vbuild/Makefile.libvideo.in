@@ -1,0 +1,140 @@
+# Generated automatically from Makefile.in by configure.
+SHELL = /bin/sh
+
+OURLIB = libvideo.a
+OURLIBSO =
+
+MAINSRC ?= ..
+
+VICE  ?= $(MAINSRC)/vice2
+FLASHLIGHT_INC= @FLASHLIGHT_INC@ 
+SDIR   = $(VICE)/src/video
+SHLD   = @LD@ -shared
+LD     = @LD@ -r
+AR     = @AR@
+CC     = @CC@
+SINC   = $(SDIR)
+OBJ	   = ./obj/video
+INC    = 
+AINC   = . $(INC) \
+$(FLASHLIGHT_INC) \
+$(MAINSRC)/common \
+$(MAINSRC)/viceport \
+$(VICE)/src/arch/unix \
+$(VICE)/src \
+$(VICE)/src/core \
+$(VICE)/src/c64 \
+$(VICE)/src/c64/cart \
+$(VICE)/src/drive \
+$(VICE)/src/vdrive \
+$(VICE)/src/drive/iec/c64exp \
+$(VICE)/src/raster \
+$(VICE)/src/sid \
+$(VICE)/src/tape \
+$(VICE)/src/userport \
+$(VICE)/src/viciisc \
+$(VICE)/src/lib/p64 \
+$(VICE)/src/video \
+$(VICE)/src/rtc 
+
+VER_MAJOR = 1
+VER_MINOR = 20
+VERSION = $(VER_MAJOR).$(VER_MINOR)
+
+ALLINC = $(addprefix -I,$(AINC))
+
+
+CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+#CFLAGS = -g @CONF_CFLAGS@ -O3 -pthread -c $(ALLINC)
+
+DIRS= obj
+
+OBJF  = \
+    render1x1.o \
+    render1x1pal.o \
+    render1x1ntsc.o \
+    render1x2.o \
+    render1x2crt.o \
+    render2x2.o \
+    render2x2crt.o \
+    render2x2pal.o \
+    render2x2ntsc.o \
+    renderscale2x.o \
+    render2x4.o \
+    render2x4crt.o \
+    renderyuv.o \
+    video-canvas.o \
+    video-cmdline-options.o \
+    video-color.o \
+    video-render-1x2.o \
+    video-render-2x2.o \
+    video-render-crt.o \
+    video-render-pal.o \
+    video-render.o \
+    video-resources.o \
+    video-sound.o \
+    video-viewport.o
+
+HEADF = \
+    render1x1.h \
+    render1x1_dingoo.h \
+    render1x1pal.h \
+    render1x1ntsc.h \
+    render1x2.h \
+    render1x2crt.h \
+    render2x2.h \
+    render2x2crt.h \
+    render2x2pal.h \
+    render2x2ntsc.h \
+    renderscale2x.h \
+    render2x4.h \
+    render2x4crt.h \
+    renderyuv.h \
+    video-canvas.h \
+    video-color.h \
+    video-render.h \
+    video-resources.h \
+    video-sound.h \
+
+HEAD    = $(addprefix $(SINC)/,$(HEADF))
+OBJS    = $(addprefix $(OBJ)/,$(OBJF))
+
+# If compiling as development, then alter CFLAGS
+#
+devel := CFLAGS += -g -DDEVELOPMENT
+
+all: hello dirs $(OURLIB) $(OURLIBSO)
+	@echo Done
+
+c64: 
+
+hello:
+	@echo Building Vice C64 video library 
+	@echo
+
+$(OURLIB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OURLIBSO): $(OBJS) $(HEAD)
+	@echo Creating shared library $(OURLIBSO)
+	@rm -f $@
+	$(SHLD) -o $@ $(OBJS)
+
+$(OURLIBDB): $(OBJS) $(HEAD)
+	@echo Creating library $@
+	@rm -f $@
+	@$(AR) -r $@ $(OBJS)
+
+$(OBJ)/%.o: $(SDIR)/%.c $(HEAD)
+	@echo CC	$<
+	@$(CC) $(CFLAGS) -o $@	$<
+
+clean:
+	rm -f $(OBJ)/*.o $(OURLIB) $(OURLIBSO)
+
+dirs:
+	@[ -d $(OBJ) ] || mkdir -p $(OBJ)
+
+#end
