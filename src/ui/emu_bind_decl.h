@@ -1,6 +1,6 @@
 /*
  * THEC64
- * Copyright (C) 2019 Chris Smith
+ * Copyright (C) 2020 Chris Smith
  *
  * This confidential and proprietary software may be used only
  * as authorised by a licensing agreement from Chris Smith.
@@ -72,6 +72,20 @@ typedef enum {
     Emu_Media_Count = Emu_Media_Max + 1,
 } emu_media_type_t;
 
+typedef enum {
+    Emu_Media_Cassette_Stop    = 0,
+    Emu_Media_Cassette_Start   = 1,
+    Emu_Media_Cassette_Forward = 2,
+    Emu_Media_Cassette_Rewind  = 3,
+    Emu_Media_Cassette_Reset   = 4,
+    Emu_Media_Cassette_Counter = 5,
+    Emu_Media_Cassette_Motor   = 6,
+    Emu_Media_Cassette_Advance = 7,
+    Emu_Media_Cassette_Command = 8,
+    Emu_Media_Cassette_None    = 98,
+    Emu_Media_Cassette_Unknown = 99,
+} emu_media_cassette_command_t;
+
 typedef struct {
     emu_media_type_t media_type;
     char filename[1024];
@@ -82,5 +96,11 @@ typedef struct {
     int  readonly;
     int  accurate_loading;
 } emu_load_params_t;
+
+typedef enum {
+    Emu_Reset_Hard   = 0,
+    Emu_Reset_Soft   = 1,
+    Emu_Reset_Freeze = 2,
+} emu_reset_type_t;
 
 #endif

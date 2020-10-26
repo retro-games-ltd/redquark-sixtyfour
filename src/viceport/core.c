@@ -60,7 +60,6 @@ extern int maincpu_running;
 extern const char const *emu_id;
 void core_init();
 void core_start();
-void emu_core_reset(); // in bind.c
 
 // -------------------------------------------------------------------------------
 //
@@ -142,7 +141,7 @@ emulator_loop( void *p )
 
     needs_shutdown = 1; // Make sure core_atexit() shuts down the emulator internals
 
-    emu_core_reset();
+    emu_core_reset( Emu_Reset_Hard );
 
     maincpu_running = 1;
 

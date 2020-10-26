@@ -16,15 +16,12 @@
 #include "sound.h"
 #include "resources.h"
 #include "screenshot.h"
+#include "datasette.h"
 #include "c64/c64-snapshot.h"
 #include "vicii.h"
 
 // Import emu_load_params_t definition
 #include "emu_bind_decl.h"
-
-extern void core_cartridge_attach_image( const char *filename ); // Per-core specific cartridge insert - Handles different cart types
-
-void emu_core_reset();
 
 int emu_load( const char *filename, const char *ext ) {
 
@@ -77,8 +74,9 @@ emu_load_status_t * emu_load_start( emu_load_params_t *params )
         ( flen >= 3 && 
              params->file_extension[flen-4] == '.' &&
             (params->file_extension[flen-3] | 0x20) == 'c' &&
-            (params->file_extension[flen-2] | 0x20) == 'r' &&
-            (params->file_extension[flen-1] | 0x20) == 't' ) ) {
+            (params->file_extension[flen-2] | 0x20) == 'r' 
+            //&& (params->file_extension[flen-1] | 0x20) == 't'  // Allow crt cr2 cr4 cr6 cra crb (ie crx)
+            ) ) {
 
         if( params->title_id > 0 ) {
             // Set inital RAM memory state so (patched) cartridge knows which
@@ -117,7 +115,7 @@ emu_load_status_t * emu_load_start( emu_load_params_t *params )
     }
 
     // We're not autoloading, so reset machine to start. This invokes "BASIC", or a cartridge program.
-    if( do_reset ) emu_core_reset();
+    if( do_reset ) emu_core_reset( Emu_Reset_Hard );
 
     return &load_status;
 }
@@ -152,9 +150,24 @@ int emu_create_blank_disk_image( char *fullpath, char *diskname ) {
     return vdrive_internal_create_format_disk_image( fullpath, diskname, DISK_IMAGE_TYPE_D64 );
 }
 
-void emu_core_reset() {
-    resources_set_int("Sound", 1 );
-    machine_trigger_reset(MACHINE_RESET_MODE_HARD);
+void emu_core_reset( emu_reset_type_t rt ) {
+
+    switch( rt )
+    {
+        case Emu_Reset_Hard:
+            resources_set_int("Sound", 1 );
+            machine_trigger_reset( MACHINE_RESET_MODE_HARD );
+            break;
+
+        case Emu_Reset_Soft:
+            resources_set_int("Sound", 1 );
+            machine_trigger_reset( MACHINE_RESET_MODE_SOFT );
+            break;
+
+        case Emu_Reset_Freeze:
+            core_cartridge_trigger_freeze();
+            break;
+    }
 }
 
 void emu_wait_for_frame() {
@@ -237,4 +250,46 @@ ui_display_drive_led(int drive_number, unsigned int pwm1, unsigned int pwm2)
     if( !status &&  LED ) { drive_led = 0; }
 
     LED = status;
+}
+
+static int tape_counter = 0;
+static int tape_running = 0;
+
+void ui_display_tape_counter(int counter)
+{
+    tape_counter = counter;
+}
+
+void ui_display_tape_motor_status(int motor)
+{
+    tape_running = motor ? 1 : 0;
+}
+
+int
+emu_cassette_control( emu_media_cassette_command_t command )
+{
+    int r = 0;
+    switch( command ) {
+        case Emu_Media_Cassette_Stop:    r = datasette_control( DATASETTE_CONTROL_STOP          ); break;
+        case Emu_Media_Cassette_Start:   r = datasette_control( DATASETTE_CONTROL_START         ); break;
+        case Emu_Media_Cassette_Forward: r = datasette_control( DATASETTE_CONTROL_FORWARD       ); break;
+        case Emu_Media_Cassette_Rewind:  r = datasette_control( DATASETTE_CONTROL_REWIND        ); break;
+        case Emu_Media_Cassette_Advance: r = datasette_control( DATASETTE_CONTROL_ADVANCE       ); break;
+ 
+        case Emu_Media_Cassette_Reset:   r = datasette_control( DATASETTE_CONTROL_RESET_COUNTER ); break;
+        case Emu_Media_Cassette_Counter: r = tape_counter; break;
+        case Emu_Media_Cassette_Motor:   r = tape_running; break;
+        case Emu_Media_Cassette_Command:
+            {
+                switch( datasette_control( DATASETTE_CONTROL_GET_CMD ) ) {
+                    case DATASETTE_CONTROL_STOP:    r = Emu_Media_Cassette_Stop;    break;
+                    case DATASETTE_CONTROL_START:   r = Emu_Media_Cassette_Start;   break;
+                    case DATASETTE_CONTROL_FORWARD: r = Emu_Media_Cassette_Forward; break;
+                    case DATASETTE_CONTROL_REWIND:  r = Emu_Media_Cassette_Rewind;  break;
+                    default: r = Emu_Media_Cassette_Unknown; break;
+                }
+            }
+            break;
+    }
+    return r;
 }

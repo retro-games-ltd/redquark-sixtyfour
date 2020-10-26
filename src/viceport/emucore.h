@@ -23,6 +23,8 @@
 
 #include "videoarch.h"
 
+#include "emu_bind_decl.h"
+
 // core.c
 int  emu_initialise();
 int  emu_start();
@@ -33,8 +35,12 @@ void emu_configure_video_60hz();
 void emu_configure_video_50hz();
 void emu_wait_for_frame();
 void emu_start_frame();
+void emu_core_reset( emu_reset_type_t rt );
 
 void emu_set_vertical_shift( int adjust );
+
+void core_cartridge_attach_image( const char *filename );
+void core_cartridge_trigger_freeze();
 
 void vsyncarch_sync_with_raster(video_canvas_t *c);
 int delete_temporary_files();

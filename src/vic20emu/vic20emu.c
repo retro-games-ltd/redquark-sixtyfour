@@ -639,10 +639,34 @@ emu_attach_default_storage( int has_external_storage, const char **fname  )
 }
 
 // -------------------------------------------------------------------------------
+// Expects a .cr[1245ABMFPT] extension
 //
 void core_cartridge_attach_image( const char * filename )
 {
-    cartridge_attach_image( CARTRIDGE_VIC20_DETECT, filename ); 
+    int type = CARTRIDGE_VIC20_GENERIC;
+    char t   = filename[ strlen(filename) - 1 ];
+
+    if(t >= 'a' && t <= 'z' ) t -= ('a' - 'A'); // Make Upper case
+
+    switch( t ) {
+        case 'T' : type = CARTRIDGE_VIC20_GENERIC;   break;
+        case '2' : type = CARTRIDGE_VIC20_16KB_2000; break;
+        case '4' : type = CARTRIDGE_VIC20_16KB_4000; break;
+        case '6' : type = CARTRIDGE_VIC20_16KB_6000; break;
+        case 'A' : type = CARTRIDGE_VIC20_8KB_A000;  break;
+        case 'B' : type = CARTRIDGE_VIC20_4KB_B000;  break;
+        case 'M' : type = CARTRIDGE_VIC20_MEGACART;  break;
+        case 'F' : type = CARTRIDGE_VIC20_FINAL_EXPANSION;  break;
+        case 'P' : type = CARTRIDGE_VIC20_FP;  break; // Flash Pllugin
+    }
+
+    cartridge_attach_image( type, filename ); 
+}
+
+// -------------------------------------------------------------------------------
+//
+void core_cartridge_trigger_freeze()
+{
 }
 
 // -------------------------------------------------------------------------------
@@ -680,10 +704,10 @@ static emu_capabilities_t capabilities = {
     "VIC20",
     {
        //                     sl  sw  sh  sd  pox poy pw   ph   Display Mode widths         Virtual Keyboard shifts
-      { 0, Model_VIC20_PAL,   PNS,224,PNH,32, 48, 48, 176, 184, { P_PP_W, P_EU_W, P_US_W }, { -130, -70, 0 } },
-      { 0, Model_VIC20_NTSC,  NNS,200,NNH,32, 20, 42, 176, 184, { N_PP_W, N_EU_W, N_US_W }, { -110, -50, 0 } },
-      { 0, Model_VIC20_PALF,  PFS,224,PFH,32, 48, 48, 176, 184, { P_PP_W, P_EU_W, P_US_W }, { -130, -70, 0 } },
-      { 0, Model_VIC20_NTSCF, NFS,200,NFH,32, 20, 42, 176, 184, { N_PP_W, N_EU_W, N_US_W }, { -110, -50, 0 } },
+      { 0, Model_VIC20_PAL,   PNS,224,PNH,32, 48, 48, 176, 184, { P_PP_W, P_EU_W, P_US_W }, { -130, -75, 0 } },
+      { 0, Model_VIC20_NTSC,  NNS,200,NNH,32, 20, 42, 176, 184, { N_PP_W, N_EU_W, N_US_W }, { -90,  -75, 0 } },
+      { 0, Model_VIC20_PALF,  PFS,224,PFH,32, 48, 48, 176, 184, { P_PP_W, P_EU_W, P_US_W }, { -130, -75, 0 } },
+      { 0, Model_VIC20_NTSCF, NFS,200,NFH,32, 20, 42, 176, 184, { N_PP_W, N_EU_W, N_US_W }, { -90,  -75, 0 } },
       { -1 }
     },
     1,
