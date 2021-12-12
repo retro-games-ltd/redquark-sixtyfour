@@ -19,6 +19,7 @@
 #include "datasette.h"
 #include "c64/c64-snapshot.h"
 #include "vicii.h"
+#include "emumousedrv.h"
 
 // Import emu_load_params_t definition
 #include "emu_bind_decl.h"
@@ -292,4 +293,45 @@ emu_cassette_control( emu_media_cassette_command_t command )
             break;
     }
     return r;
+}
+
+void emu_joystick_enable( int count )
+{
+    // If more than 2 ports are being set up, then enable user-port joystick support
+    resources_set_int("ExtraJoy", count > 2 );
+}
+
+void emu_mouse_enable( int port, int state )
+{
+    resources_set_int("Mousetype", MOUSE_TYPE_1351 );
+    resources_set_int("Mouseport", port == 2 ? 2 : 1 );
+    resources_set_int("Mouse",     state == 1 );
+}
+
+void emu_mouse_position( int x, int y )
+{
+    mouse_move( x, y );
+}
+
+void emu_mouse_button( emu_mouse_control b, int state )
+{
+    switch(b) {
+        case EMU_MOUSE_BUTTON_LEFT:
+            mouse_button_left( state != 0 );
+            break;
+        case EMU_MOUSE_BUTTON_RIGHT:
+            mouse_button_right( state != 0 );
+            break;
+        case EMU_MOUSE_BUTTON_MIDDLE:
+            mouse_button_middle( state != 0 );
+            break;
+        case EMU_MOUSE_BUTTON_WHEEL_UP:
+            mouse_button_up( state != 0 );
+            break;
+        case EMU_MOUSE_BUTTON_WHEEL_DOWN:
+            mouse_button_down( state != 0 );
+            break;
+        default:
+            break;
+    }
 }

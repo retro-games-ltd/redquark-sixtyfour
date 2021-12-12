@@ -18,7 +18,8 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 
-#  define _BASE_USB_MOUNT_POINT   "/mnt"
+#define _BASE_USB_MOUNT_POINT   "/mnt"
+
 #  define USB_MOUNT_POINT   _BASE_USB_MOUNT_POINT
 
 #endif

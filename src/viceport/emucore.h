@@ -20,6 +20,8 @@
 
 #include "autostart.h"
 #include "joystick.h"
+#include "mouse.h"
+#include "emumousedrv.h"
 
 #include "videoarch.h"
 
@@ -38,6 +40,7 @@ void emu_start_frame();
 void emu_core_reset( emu_reset_type_t rt );
 
 void emu_set_vertical_shift( int adjust );
+void emu_mouse_enable( int port, int state );
 
 void core_cartridge_attach_image( const char *filename );
 void core_cartridge_trigger_freeze();

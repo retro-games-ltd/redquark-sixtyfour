@@ -15,17 +15,40 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "mouse.h"
+#include "vsyncapi.h"
+#include "emumousedrv.h"
+
+int mouse_x = 0, mouse_y = 0;
+int mouse_accelx = 2, mouse_accely = 2;
+static unsigned long mouse_timestamp = 0;
+
 void mousedrv_mouse_changed(void)        { }
 int  mousedrv_resources_init(void)       { return 0; }
 int  mousedrv_cmdline_options_init(void) { return 0; }
-void mousedrv_init(void)                 { }
+void mousedrv_init(void) { }
 
-void mouse_button(int bnumber, int state) { }
+int mousedrv_get_x(void)
+{
+    return mouse_x;
+}
 
-int mousedrv_get_x(void) { return 0; }
+int mousedrv_get_y(void)
+{
+    return mouse_y;
+}
 
-int mousedrv_get_y(void) { return 0; }
+void mouse_move( int dx, int dy )
+{
+    mouse_x += dx;
+    mouse_y -= dy;
+    mouse_x &= 65535;
+    mouse_y &= 65535;
+    mouse_timestamp = vsyncarch_gettime();
+}
 
-void mouse_move(float dx, float dy) { }
-
-unsigned long mousedrv_get_timestamp(void) { return 0; }
+unsigned long mousedrv_get_timestamp(void)
+{
+    return mouse_timestamp;
+}

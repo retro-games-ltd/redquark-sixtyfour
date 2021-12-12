@@ -151,6 +151,7 @@ core_start()
 static void
 _configure_video_50hz()
 {
+
     ntsc_clks_second = NTSC_FRAME_CLKS * 50;
     pal_clks_second  =  PAL_FRAME_CLKS * 50;
 
@@ -228,6 +229,7 @@ emu_sound_scale_enable( int e )
 static void
 set_model_ntsc( emu_screen_t *sc )
 {
+
     // This will cause a HARD reset
     resources_set_int("MachineVideoStandard", MACHINE_SYNC_NTSC );
 
@@ -245,6 +247,7 @@ set_model_ntsc( emu_screen_t *sc )
 static void
 set_model_pal( emu_screen_t *sc )
 {
+
     // This will cause a HARD reset
     resources_set_int("MachineVideoStandard", MACHINE_SYNC_PAL );
 
